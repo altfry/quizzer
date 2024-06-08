@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/home.css">
+  <script src="https://unpkg.com/petite-vue@0.4.1/dist/petite-vue.iife.js"></script>
+  <script src="https://unpkg.com/@supabase/supabase-js@2.43.1/dist/umd/supabase.js"></script>
+  <title>Quizzer</title>
+</head>
+<body>
+  <div id='home'>
+    <main>
+      <div class='question' v-for="quest, i in questions">
+        <div class="topbar">
+          <h1>Otázka #{{ i + 1 }}</h1>
+          <h1
+            class="close"
+            v-if="questions.length > 1"
+            @click="deleteQuestion(i)"
+          >X</h1>
+        </div>
+        <textarea rows="3" class='content' v-model="quest.text"></textarea>
+        <div class='answers'>
+          <div class='answer' v-for="_, j in quest.options">
+            <input
+              type="radio"
+              class='ans-check'
+              :checked="quest.correct === j"
+              @change="quest.correct = j"
+            >
+            <input type="text" class='ans-text' v-model="quest.options[j]">
+          </div>
+        </div>
+      </div>
+    </main>
+    <div id='submit'>
+      <button id='btn-add' @click="addQuestion()">Přidat otázku</button>
+      <button id='btn-create' @click="createQuiz()">Vytvořit kvíz</button>
+    </div>
+  </div>
+  <script src="js/home.js"></script>
+</body>
+</html>

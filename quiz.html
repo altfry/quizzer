@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/quiz.css">
+  <script src="https://unpkg.com/petite-vue@0.4.1/dist/petite-vue.iife.js"></script>
+  <script src="https://www.unpkg.com/@supabase/supabase-js@2.43.1/dist/umd/supabase.js"></script>
+  <title>Quizzer</title>
+</head>
+<body>
+  <div id="home" @vue:mounted="onMount()">
+    <div class="loading" v-if="questions === null">
+      Loading...
+    </div>
+    <div v-else>
+      <main>
+        <div class='question' v-for="quest, i in questions">
+          <h1>Otázka #{{ i + 1}}</h1>
+          <div class='q-text'>{{ quest.text }}</div>
+          <div class='answers'>
+            <div
+              class='answer'
+              v-for="opt, j in quest.options"
+              @click="selectOption(i, j)"
+              :class="{
+                correct: isFinished && j === quest.correct,
+                wrong: isFinished && j === quest.selected && j !== quest.correct
+              }"
+            >
+              <input
+                type="radio"
+                class='ans-check'
+                :checked="quest.selected === j"
+                v-if="!isFinished"
+              >
+              <div>{{ opt }}</div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <div id='submit' v-if="!isFinished">
+        <button id='btn-finish' @click="isFinished = true">Dokončit kvíz</button>
+      </div>
+      <div id='results' v-else>
+        <div id='result-text'>Správně {{ correctCount }} z {{ questions.length }} otázek</div>
+        <button id='btn-replay' @click="restart()">Hrát znovu</button>
+      </div>
+    </div>
+  </div>
+  <script src="js/quiz.js"></script>
+</body>
+</html>
